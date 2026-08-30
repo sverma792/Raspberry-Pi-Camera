@@ -23,7 +23,7 @@ from flask import Flask, Response, render_template_string
 
 try:
     from picamera2 import Picamera2
-    from picamera2.encoders import MJPEGEncoder
+    from picamera2.encoders import JpegEncoder
     from picamera2.outputs import FileOutput
     PICAMERA_AVAILABLE = True
 except ImportError:
@@ -77,7 +77,11 @@ class Camera:
         )
         self.picam2.configure(video_config)
         self.picam2.set_controls({"FrameRate": framerate})
-        self.encoder = MJPEGEncoder(q=JPEG_QUALITY)
+        # JpegEncoder is the software JPEG encoder and accepts a "q" (quality)
+        # parameter. (Note: picamera2's MJPEGEncoder is a *hardware* V4L2
+        # encoder that only takes a bitrate, not a quality value — that's
+        # the wrong class for this use case.)
+        self.encoder = JpegEncoder(q=JPEG_QUALITY)
 
     def start(self):
         self.picam2.start_recording(self.encoder, FileOutput(self.output))
