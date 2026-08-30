@@ -1,0 +1,6 @@
+Flask>=3.0
+
+# picamera2 is NOT installed via pip on Raspberry Pi OS.
+# It comes preinstalled system-wide on Raspberry Pi OS Bookworm and later.
+# If it's missing, install it with:
+#   sudo apt update && sudo apt install -y python3-picamera2
